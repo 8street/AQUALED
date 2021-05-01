@@ -1,0 +1,117 @@
+<!DOCTYPE html><html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" href="data:,">
+
+        <style>
+            html { background-color: #27292f; color: #DCDCDC; font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}
+            .button { background-color: #195B6A; border: none; color: white; padding: 16px 40px; text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}
+            .button2 { background-color: #77878A;}
+            .button3 { background-color: #195B6A; border: none; color: white; padding: 6px 40px; text-decoration: none; font-size: 16px; margin: 2px; cursor: pointer;}
+            .input { background-color: #b6b6b6; color: #220e0e; font-size: 20px;}
+            .center { margin-left: auto; margin-right: auto;}
+       
+        </style>
+
+        <!-- <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script> -->
+    </head>
+    <body>
+        <h1>Aquarium LED driver</h1>
+
+        <p>Uptime: 10:30 </p>
+        <p>Current time: 9:53</p>
+
+
+
+        <p><a href=\"/led/on\"><button class="button">Direct Control</button></a></p>
+
+
+        <p><form action="/control" method=”get”>
+            <input type="number" class="input" name="power" placeholder="Power in %" min="0" max="100" value="0">
+            <input type="number" class="input" name="color" placeholder="Color temp in K" min="3000" max="6500" value="6500">
+            <input type="submit" class="button3" value="Send"></form></p>
+    
+        <h2>Settings</h2>
+
+        <table class="center" width="930"><tr><th width="80">Hour:</th>
+        <th width="80">Minute:</th><th width="140">Power:</th><th width="150">Color:</th>
+        <th width="80">Random:</th><th></th></tr></table>
+
+        <table class="center">
+            <tr>
+                <th>
+                    <form action="/setting0" method=”get” width=800>
+                        <input type="number" class="input" name="hour" placeholder="Hour" min="0" max="23" value="0">
+                        <input type="number" class="input" name="minute" placeholder="Minute" min="0" max="59" value="0">
+                        <input type="range" class="input" name="power" min="0" max="100" value="0">
+                        45
+                        <input type="range" class="input" name="color" min="3000" max="6500" value="6500">
+                        <input type="number" class="input" name="random" placeholder="Random power in %" min="0" max="100" value="0">
+                        <input type="submit" class="button3" value="Save">
+                    </form>            
+                </th>
+                <th>
+                    <a href=\"/add0&\"><button class="button3">Add</button></a>
+                    <a href=\"/del0&\"><button class="button3">Delete</button></a>
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <form action="/setting0" method=”get” width=800>
+                        <input type="number" class="input" name="hour" placeholder="Hour" min="0" max="23" value="0">
+                        <input type="number" class="input" name="minute" placeholder="Minute" min="0" max="59" value="0">
+                        <input type="range" class="input" name="power" min="0" max="100" value="0">
+                        0
+                        <input type="range" class="input" name="color" min="3000" max="6500" value="6500">
+                        <input type="number" class="input" name="random" placeholder="Random power in %" min="0" max="100" value="0">
+                        <input type="submit" class="button3" value="Save">
+                    </form>            
+                </th>
+                <th>
+                    <a href=\"/add0&\"><button class="button3">Add</button></a>
+                    <a href=\"/del0&\"><button class="button3">Delete</button></a>
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <form action="/setting0" method=”get”>
+                        <input type="number" class="input" name="hour" placeholder="Hour" min="0" max="23" value="0">
+                        <input type="number" class="input" name="minute" placeholder="Minute" min="0" max="59" value="0">
+                        <input type="range" class="input" name="power" min="0" max="100" value="0">
+                        100
+                        <input type="range" class="input" name="color" min="3000" max="6500" value="6500">
+                        <input type="number" class="input" name="random" placeholder="Random power in %" min="0" max="100" value="0">
+                        <input type="submit" class="button3" value="Save">
+                    </form>            
+                </th>
+                <th>
+                    <a href=\"/add0&\"><button class="button3">Add</button></a>
+                    <a href=\"/del0&\"><button class="button3">Delete</button></a>
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <form action="/setting0" method=”get”>
+                        <input type="number" class="input" name="hour" placeholder="Hour" min="0" max="23" value="0">
+                        <input type="number" class="input" name="minute" placeholder="Minute" min="0" max="59" value="0">
+                        <input type="number" class="input" name="power" placeholder="Power in %" min="0" max="100" value="0">
+                        <input type="number" class="input" name="color" placeholder="Color temp in K" min="3000" max="6500" value="6500">
+                        <input type="number" class="input" name="random" placeholder="In %" min="0" max="100" value="0">
+                        <input type="submit" class="button3" value="Save">
+                    </form>            
+                </th>
+                <th>
+                    <a href=\"/add0&\"><button class="button3">Add</button></a>
+                    <a href=\"/del0&\"><button class="button3">Delete</button></a>
+                </th>
+            </tr>
+        </table>
+
+        <p><form action="/wifi"><table class="center"><tr><th>SSID:</th>
+        <th><input type="text" class="input" name="ssid" placeholder="SSID" value="asda"></th></tr><tr><th>Password:</th> 
+        <th><input type="password" class="input" name="password" placeholder="Password" value=""></th></tr></table>
+        <input type="submit" class="button" value="Save and connect"></form></p>
+    
+    </body>
+</html>
