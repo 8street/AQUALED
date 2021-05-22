@@ -15,18 +15,21 @@
 // http://wikihandbk.com/wiki/ESP32:%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B/%D0%92%D0%B5%D0%B1-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80_%D0%BD%D0%B0_%D0%B1%D0%B0%D0%B7%D0%B5_ESP32:_%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%BD%D0%BE%D0%B5_%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5_%D1%81%D0%B5%D1%80%D0%B2%D0%BE%D0%BF%D1%80%D0%B8%D0%B2%D0%BE%D0%B4%D0%BE%D0%BC
 
 const char *Default_ap_ssid = "ESP8266_AP";
+const char *Default_ap_password = "AP_password";
 
 String NTP_server = "pool.ntp.org";
 // +3 hour time zone
 long Timezone = 3; 
 
 //////////////// function declaration ////////////
-void update_time();
+void update_NTP_time();
 String uptime();
 String get_middle_string(const String &str, const String &before, const String &after);
 bool save_to_flash(int address, String &str);
 bool read_from_flash(int address, String &str);
 bool new_day();
+bool wifi_init();
+bool wifi_connect_to_station();
 ///////////////// variables ////////////////
 WiFiServer server(80);
 WiFiUDP ntpUDP;
@@ -94,45 +97,9 @@ void setup(void){
   Serial.print("Readed EEPROM ssid: " + Eeprom_ssid);
   Serial.println(" password: " + Eeprom_password);
 
-  int attempts = 0;
-  if(digitalRead(WIFI_PIN))
-  {
-    // Connect to existing WiFi
-    Serial.print("Connecting");
-    WiFi.begin(Eeprom_ssid, Eeprom_password);
+  // connect to wifi station or create AP
+  wifi_init();
 
-    while (WiFi.status() != WL_CONNECTED) {
-      delay(450);
-      digitalWrite(LED_PIN, LOW);
-      delay(50);
-      digitalWrite(LED_PIN, HIGH);
-      Serial.print(".");
-      attempts++;
-      if(attempts > 50){
-        WiFi.disconnect(true);
-        Serial.println("");
-        Serial.println("WiFi cannot connect to SSID " + Eeprom_ssid + ". Switch to AP mode.");
-        break;
-      }
-    }
-
-    Serial.println("");
-    if(WiFi.status() == WL_CONNECTED){
-      WiFi.setAutoReconnect(true);
-      Serial.println("Connected to " + Eeprom_ssid);
-      Serial.println("IP address: " + WiFi.localIP().toString());
-    }
-  }
-
-  // AP mode
-  if(!digitalRead(WIFI_PIN) || attempts > 50){
-    WiFi.softAPConfig(IPAddress(192, 168, 0, 1), IPAddress(192, 168, 0, 1), IPAddress(255, 255, 255, 0));
-    WiFi.softAP(Default_ap_ssid); 
-    Serial.println("WiFi AP created. SSID " + String(Default_ap_ssid));
-    Serial.println("IP address: " + WiFi.softAPIP().toString());
-  }
-
-  Serial.println("");
   server.begin();
   Serial.println("HTTP server started");
 
@@ -151,7 +118,7 @@ void setup(void){
   Serial.println("NTP client started");
   Serial.print("NTP Server: " + eeprom_ntp);
   Serial.println(" timezone: " + eeprom_timezone + "h");
-  update_time();
+  update_NTP_time();
 
   randomSeed(timeClient.getEpochTime());
 
@@ -220,10 +187,12 @@ void loop(void){
   // Handle update firmware via WIFI
   ArduinoOTA.handle();
 
-  // update NTP time every hour
+  // every hour
   if(millis() - updated_miliseconds >= 60 * 60 * 1000){
+    wifi_connect_to_station();
+    update_NTP_time();
+
     updated_miliseconds = millis();
-    update_time();
   }
 
   // randomize power every day
@@ -363,7 +332,7 @@ void loop(void){
               timeClient = new_client;
               timeClient.begin();
               Serial.println("New NTP settings saved.");
-              update_time();
+              update_NTP_time();
             }else if (header.indexOf("GET /reboot") >= 0 ) {
               ESP.restart();
             }
@@ -503,7 +472,7 @@ void loop(void){
   }
 }
 
-void update_time()
+void update_NTP_time()
 {
   Serial.println("NTP Time has been updated");
   timeClient.update();
@@ -581,4 +550,65 @@ bool new_day()
     }
   }
   return false;
+}
+
+bool wifi_init()
+{
+  bool ret_val = false;
+  int attempts = 0;
+  if(digitalRead(WIFI_PIN))
+  {
+    // Connect to existing WiFi
+    Serial.print("Connecting");
+    WiFi.begin(Eeprom_ssid, Eeprom_password);
+
+    while (WiFi.status() != WL_CONNECTED) {
+      delay(450);
+      digitalWrite(LED_PIN, LOW);
+      delay(50);
+      digitalWrite(LED_PIN, HIGH);
+      Serial.print(".");
+      attempts++;
+      if(attempts > 50){
+        ret_val |= WiFi.disconnect(true);
+        Serial.println("");
+        Serial.println("WiFi cannot connect to SSID " + Eeprom_ssid + ". Switch to AP mode.");
+        break;
+      }
+    }
+
+    Serial.println("");
+    if(WiFi.status() == WL_CONNECTED){
+      ret_val |= WiFi.setAutoReconnect(true);
+      Serial.println("Connected to " + Eeprom_ssid);
+      Serial.println("IP address: " + WiFi.localIP().toString());
+    }
+  }
+
+  // AP mode
+  if(!digitalRead(WIFI_PIN) || attempts > 50){
+    ret_val |= WiFi.softAPConfig(IPAddress(192, 168, 0, 1), IPAddress(192, 168, 0, 1), IPAddress(255, 255, 255, 0));
+    ret_val |= WiFi.softAP(Default_ap_ssid, Default_ap_password, 1, 1); 
+    Serial.println("WiFi AP created. SSID: " + String(Default_ap_ssid));
+    Serial.println("AP password: " + String(Default_ap_password));
+    Serial.println("IP address: " + WiFi.softAPIP().toString());
+  }
+
+  Serial.println("");
+
+  return ret_val;
+}
+
+bool wifi_connect_to_station()
+{
+  bool ret_val = false;
+  WiFiMode_t currentMode = WiFi.getMode();
+  bool ap_is_enabled = ((currentMode & WIFI_AP) != 0);
+  if(ap_is_enabled){
+    ret_val |= WiFi.softAPdisconnect(true);
+    delay(5);
+
+    ret_val |= wifi_init();
+  }
+  return ret_val;
 }
