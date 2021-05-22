@@ -10,3 +10,5 @@ Aquarium LED controller on ESP8266. The controller drive constant current driver
 2. Open project folder in VS Code
 3. Compile and download not OTA (over-the-air) environment first 
 4. After first downloading you can compile and download OTA version via WiFi
+
+Also you can use Arduino IDE but I hope you won't.
