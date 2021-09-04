@@ -42,8 +42,6 @@ bool Direct_Control_state = false;
 int Direct_Control_power = 0;
 int Direct_Control_color = WHITE_COLOR_TEMP;
 
-unsigned long updated_miliseconds;
-
 Light Light_system;
 std::vector<Light_setting> Light_settings;
 std::vector<Light_setting> Random_light_settings;
@@ -181,6 +179,7 @@ void setup(void){
 //////////////////// loop //////////////////////////
 
 void loop(void){
+  static int old_hour;
   static unsigned long loop_time;
   const unsigned long loop_start_time = millis();
 
@@ -188,11 +187,11 @@ void loop(void){
   ArduinoOTA.handle();
 
   // every hour
-  if(millis() - updated_miliseconds >= 60 * 60 * 1000){
+  const int hour = timeClient.getHours();
+  if(hour != old_hour){
+    old_hour = hour;
     wifi_connect_to_station();
     update_NTP_time();
-
-    updated_miliseconds = millis();
   }
 
   // randomize power every day
@@ -596,7 +595,7 @@ bool wifi_init()
 
   Serial.println("");
 
-  return ret_val;
+  return ret_val | (WiFi.status() != WL_CONNECTED);
 }
 
 bool wifi_connect_to_station()
@@ -606,6 +605,7 @@ bool wifi_connect_to_station()
   bool ap_is_enabled = ((currentMode & WIFI_AP) != 0);
   if(ap_is_enabled){
     ret_val |= WiFi.softAPdisconnect(true);
+    ret_val |= WiFi.disconnect(true);
     delay(5);
 
     ret_val |= wifi_init();
