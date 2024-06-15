@@ -1,24 +1,18 @@
 #pragma once
 #ifndef LIGHT_H
-#define LIGHT_H
+#    define LIGHT_H
 
-#include <vector>
-#include "light_driver.h"
-#include "light_setting.h"
-#include "main.h"
-#include "PWM.h"
+#    include "PWM.h"
+#    include "light_driver.h"
+#    include "light_setting.h"
+#    include <vector>
 
-
-#define RED_COLOR_TEMP 3000
-#define WHITE_COLOR_TEMP 6500
-#define AVERAGE_COLOR_TEMP 4470
-
+#    define RED_COLOR_TEMP 3000
+#    define WHITE_COLOR_TEMP 6500
+#    define AVERAGE_COLOR_TEMP 5400
 
 class Light
 {
-private:
-    std::vector<Light_driver> m_drivers;
-    std::vector<int> m_random_power_addition;
 public:
     Light();
     ~Light();
@@ -34,10 +28,22 @@ public:
     int get_max_power(int color_temp) const;
     int get_max_power_in_percent(int color_temp) const;
     bool set_max_power(int color_temp);
-    int get_driver_current(int driver) const;
+    int get_driver_current(int driver_index) const;
+    int get_driver_current(const Light_setting &setting, int driver_index) const;
+    int get_driver_power_w(int driver_index) const;
+    int get_driver_power_w(const Light_setting &setting, int driver_index) const;
+    int get_driver_max_power_w(int driver_index) const;
     int get_drivers_count() const;
-    int get_summary_power(const Light_setting &setting) const;
     int get_summary_power_w(const Light_setting &setting) const;
+    int get_day_power_wh(const std::vector<Light_setting> &settings) const;
+    Light_driver &get_driver(int driver_index);
+    const Light_driver &get_driver(int driver_index) const;
+    std::vector<Light_driver> &get_drivers();
+
+private:
+    std::vector<Light_driver> m_drivers;
+
+    int check_driver_num(int driver_index) const;
 };
 
 #endif

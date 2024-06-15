@@ -1,6 +1,6 @@
 <!DOCTYPE html><html>
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta content="width=device-width, initial-scale=1">
 
         <link rel="icon" href="data:,">
 
@@ -10,14 +10,54 @@
             .button2 { background-color: #77878A;}
             .button3 { background-color: #195B6A; border: none; color: white; padding: 6px 40px; text-decoration: none; font-size: 16px; margin: 2px; cursor: pointer;}
             .input { background-color: #b6b6b6; color: #220e0e; font-size: 20px;}
+            .input_vertical { background-color: #b6b6b6; color: #220e0e; font-size: 20px; appearance: slider-vertical;}
+            .test { background-color: #aab8bb}
             .center { margin-left: auto; margin-right: auto;}
        
         </style>
+        <!-- - -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+          google.charts.load('current', {'packages':['corechart']});
+          google.charts.setOnLoadCallback(drawChart);
+          var max_scale;
+          function setScale(newScale){
+            max_scale = newScale;
+            drawChart();};
 
-        <!-- <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script> -->
+          function showVal(newVal){
+            console.log(newVal);
+             document.getElementById("cur_val").textContent = newVal;};
+
+          function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+            ['Year', 'Sales', 'Expenses'],
+            [1,  1000,      400],
+            [2,  1170,      460],
+            [3,  660,       1120],
+            [4,  1030,      540]
+            ]);
+             
+            var options = {
+              backgroundColor: '#aab8bb',
+              vAxis: 
+              {
+                viewWindowMode:'explicit',
+                viewWindow: {
+                max:max_scale,
+                min:0}}
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+            chart.draw(data, options);
+          }
+        </script>
     </head>
     <body>
-        <h1>Aquarium LED driver</h1>
+       <h1>Aquarium LED Driver</h1>
+       <p><form action="/title">
+       <input type="text" class="input" name="str" value="Aquarium LED Driver">
+       <input type="submit" class="button3" value="Send" maxlength="49" size="49"></form></p>
 
         <p>Uptime: 10:30 </p>
         <p>Current time: 9:53</p>
@@ -31,9 +71,12 @@
             <input type="number" class="input" name="power" placeholder="Power in %" min="0" max="100" value="0">
             <input type="number" class="input" name="color" placeholder="Color temp in K" min="3000" max="6500" value="6500">
             <input type="submit" class="button3" value="Send"></form></p>
-    
-        <h2>Settings</h2>
+        
+        <p><div id="curve_chart" class="center" style="width: 1600px; height: 800px"></div>
+        <p>Y scale: <input type="range" class="input" id="scale" min="10" max="1000" value="500" oninput="setScale(this.value)" onchange="setScale(this.value)"></p>
 
+        <h2>Settings</h2>
+        <p>Current input value: <output id="cur_val"></output></p>
         <table class="center" width="930"><tr><th width="80">Hour:</th>
         <th width="80">Minute:</th><th width="140">Power:</th><th width="150">Color:</th>
         <th width="80">Random:</th><th></th></tr></table>
@@ -44,9 +87,9 @@
                     <form action="/setting0" method=”get” width=800>
                         <input type="number" class="input" name="hour" placeholder="Hour" min="0" max="23" value="0">
                         <input type="number" class="input" name="minute" placeholder="Minute" min="0" max="59" value="0">
-                        <input type="range" class="input" name="power" min="0" max="100" value="0">
+                        <input type="range" class="input" name="power" min="0" max="100" value="0" oninput="showVal(this.value)" onchange="showVal(this.value)">
                         45
-                        <input type="range" class="input" name="color" min="3000" max="6500" value="6500">
+                        <input type="range" class="input" name="color" min="3000" max="6500" value="6500" oninput="showVal(this.value)" onchange="showVal(this.value)">
                         <input type="number" class="input" name="random" placeholder="Random power in %" min="0" max="100" value="0">
                         <input type="submit" class="button3" value="Save">
                     </form>            
@@ -61,9 +104,9 @@
                     <form action="/setting0" method=”get” width=800>
                         <input type="number" class="input" name="hour" placeholder="Hour" min="0" max="23" value="0">
                         <input type="number" class="input" name="minute" placeholder="Minute" min="0" max="59" value="0">
-                        <input type="range" class="input" name="power" min="0" max="100" value="0">
+                        <input type="range" class="input" name="power" min="0" max="100" value="0" oninput="showVal(this.value)" onchange="showVal(this.value)">
                         0
-                        <input type="range" class="input" name="color" min="3000" max="6500" value="6500">
+                        <input type="range" class="input" name="color" min="3000" max="6500" value="6500" oninput="showVal(this.value)" onchange="showVal(this.value)">
                         <input type="number" class="input" name="random" placeholder="Random power in %" min="0" max="100" value="0">
                         <input type="submit" class="button3" value="Save">
                     </form>            
@@ -78,9 +121,9 @@
                     <form action="/setting0" method=”get”>
                         <input type="number" class="input" name="hour" placeholder="Hour" min="0" max="23" value="0">
                         <input type="number" class="input" name="minute" placeholder="Minute" min="0" max="59" value="0">
-                        <input type="range" class="input" name="power" min="0" max="100" value="0">
+                        <input type="range" class="input" name="power" min="0" max="100" value="0" oninput="showVal(this.value)" onchange="showVal(this.value)">
                         100
-                        <input type="range" class="input" name="color" min="3000" max="6500" value="6500">
+                        <input type="range" class="input" name="color" min="3000" max="6500" value="6500" oninput="showVal(this.value)" onchange="showVal(this.value)">
                         <input type="number" class="input" name="random" placeholder="Random power in %" min="0" max="100" value="0">
                         <input type="submit" class="button3" value="Save">
                     </form>            
@@ -108,10 +151,33 @@
             </tr>
         </table>
 
+        <p style="color:red;">! Settings not saved !</p>
+
         <p><form action="/wifi"><table class="center"><tr><th>SSID:</th>
         <th><input type="text" class="input" name="ssid" placeholder="SSID" value="asda"></th></tr><tr><th>Password:</th> 
         <th><input type="password" class="input" name="password" placeholder="Password" value=""></th></tr></table>
         <input type="submit" class="button" value="Save and connect"></form></p>
+
+
+        <table class="center" width="1380"><tr><th width="100">PWM Pin:</th>
+            <th width="100">Frequency:</th><th width="120">Resolution:</th><th width="100">Smooth:</th><th width="140">Max power:</th>
+            <th width="100">Color temp:</th><th width="100">Led off:</th><th width="100">Led max:</th><th width="100">Nonlinearity:</th><th></th></tr></table>
+      
+            <table class="center">
+              <tr><th><form action="/driver">
+              <input type="number" class="input" name="pin" placeholder="Pin number" min="0" max="16" value="16">
+              <input type="number" class="input" name="frequency" placeholder="Frequency, Hz" min="0" max="10000" value="1000">
+              <input type="number" class="input" name="resolution" placeholder="Resolution" min="0" max="10000" value="1024">
+              <input type="number" class="input" name="smooth" placeholder="Smooth" min="0" max="1000" value="10">
+              <input type="number" class="input" name="max_power" placeholder="Max power, W" min="0" max="10000" value="200">
+              <input type="number" class="input" name="color_temp" placeholder="Color temperature, K" min="0" max="20000" value="6500">
+              <input type="number" class="input" name="led_off" placeholder="Led off current, %" min="0" max="100" value="0">
+              <input type="number" class="input" name="led_max" placeholder="Led max current, %" min="0" max="100" value="100">
+              <input type="number" class="input" name="endl2_nonlin" placeholder="Nonlinearity, %" min="0" max="1000" value="1">
+              <input type="submit" class="button3" value="Send"></form></th>
+              <th><a href="/add1&"><button class="button3">Add</button></a>
+              <a href="/del1&"><button class="button3">Delete</button></a></th></tr>
+            </table>
     
     </body>
 </html>
