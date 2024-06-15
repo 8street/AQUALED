@@ -1,10 +1,8 @@
-
-
 #include <algorithm>
 
+#include <ArduinoOTA.h>
 #include <EEPROM.h>
 #include <ESP8266WiFi.h>
-#include <ArduinoOTA.h>
 
 #include "PWM.h"
 #include "main.h"
@@ -66,9 +64,9 @@ void setup(void)
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH); // led off
 
-    pinMode(WIFI_PIN, INPUT_PULLUP); 
+    pinMode(WIFI_PIN, INPUT_PULLUP);
 
-    // CPU clock speed 
+    // CPU clock speed
     system_update_cpu_freq(SYS_CPU_160MHZ);
 
     // USB-UART
@@ -105,7 +103,6 @@ void setup(void)
     }
     Server_ptr->begin(80);
     Serial.println(F("HTTP server started"));
-
 
     // NTP
     String eeprom_ntp;
@@ -184,21 +181,23 @@ void setup(void)
     ArduinoOTA.onStart([]() {
         String type;
         OTA_Active = true;
-        if (ArduinoOTA.getCommand() == U_FLASH) {
+        if (ArduinoOTA.getCommand() == U_FLASH)
+        {
             type = "sketch";
-        } else {  // U_FS
+        }
+        else
+        { // U_FS
             type = "filesystem";
         }
         // NOTE: if updating FS this would be the place to unmount FS using FS.end()
         Serial.println("Start prog " + type);
     });
     ArduinoOTA.onEnd([]() {
-        Serial.println(F("\nEnd")); 
+        Serial.println(F("\nEnd"));
         OTA_Active = false;
     });
-    ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) { 
-            Serial.printf("Progress: %u%%\r", (progress / (total / 100))); 
-    });
+    ArduinoOTA.onProgress(
+        [](unsigned int progress, unsigned int total) { Serial.printf("Progress: %u%%\r", (progress / (total / 100))); });
     ArduinoOTA.onError([](ota_error_t error) {
         Serial.printf("Error[%u]: ", error);
         if (error == OTA_AUTH_ERROR)
@@ -254,13 +253,13 @@ void loop(void)
 
     // Watchdog update
     ESP.wdtFeed();
-    
+
     // needs for wifi/tcp works
     yield();
 
     // Handle update firmware via WIFI
     ArduinoOTA.handle();
-    
+
     yield();
 
     if (new_second())
@@ -280,7 +279,7 @@ void loop(void)
         ArduinoOTA.end();
         ArduinoOTA.begin();
     }
-    
+
     yield();
 
     if (new_hour())
@@ -289,7 +288,7 @@ void loop(void)
         update_NTP_time();
         Max_loop_time_us = 0;
     }
-        
+
     yield();
 
     // randomize power every day
@@ -323,7 +322,7 @@ void loop(void)
     // needs for wifi/tcp works
     delay(50);
 
-    if(Loop_time_us > Max_loop_time_us)
+    if (Loop_time_us > Max_loop_time_us)
     {
         Max_loop_time_us = Loop_time_us;
     }

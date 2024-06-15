@@ -7,7 +7,7 @@
 Light_driver::Light_driver()
 {
 }
-Light_driver::Light_driver(const PWM &pwm, int power, int color_temp, int led_off, int led_max, int nonlinearity )
+Light_driver::Light_driver(const PWM &pwm, int power, int color_temp, int led_off, int led_max, int nonlinearity)
 {
     reinit(pwm, power, color_temp, led_off, led_max, nonlinearity);
 }
@@ -34,12 +34,12 @@ int Light_driver::off()
 int Light_driver::set_current(int percent)
 {
     m_current = clamp(percent, 0, 100);
-    //const float pwm_power = 100.0f - linearization(m_current);
-    //Serial.println("In percent: " + String(m_current));
+    // const float pwm_power = 100.0f - linearization(m_current);
+    // Serial.println("In percent: " + String(m_current));
     int pwm_power = 100 - linearization(m_current);
     pwm_power = clamp(pwm_power, 0, 100);
-    //Serial.println("Linear power: " + String(pwm_power));
-    //return m_pwm.set_duty_cycle_smooth(lroundf(m_pwm.get_resolution() * pwm_power / 100.0f));
+    // Serial.println("Linear power: " + String(pwm_power));
+    // return m_pwm.set_duty_cycle_smooth(lroundf(m_pwm.get_resolution() * pwm_power / 100.0f));
     return m_pwm.set_duty_cycle_smooth(m_pwm.get_resolution() * pwm_power / 100);
 }
 int Light_driver::get_max_power_w() const
@@ -78,10 +78,12 @@ float Light_driver::linearization(int power)
     }
     // y = -1/(x + dx) + c
     return -m_nonlinearity / (power + m_dx) + m_c;*/
-    if(power <= 0){
+    if (power <= 0)
+    {
         return 0;
     }
-    if(power >= 100){
+    if (power >= 100)
+    {
         return 100;
     }
     return power * (m_current_led_max - m_current_led_off) / (100 - 0) + m_current_led_off;
@@ -167,10 +169,10 @@ int Light_driver::init_linearity_coeffs()
 int Light_driver::set_nonlinearity(int nonlin)
 {
     nonlin = clamp(nonlin, 1, 1000);
-    m_nonlinearity = lroundf (1000.0f / nonlin);
+    m_nonlinearity = lroundf(1000.0f / nonlin);
     return init_linearity_coeffs();
 }
 int Light_driver::get_nonlinearity() const
 {
-    return lroundf (1000.0f / m_nonlinearity);
+    return lroundf(1000.0f / m_nonlinearity);
 }

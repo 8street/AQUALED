@@ -12,7 +12,7 @@
 Web_Page::Web_Page()
 {
     m_client_ptr = new WiFiClient;
-    if(!m_client_ptr)
+    if (!m_client_ptr)
     {
         Serial.println(F("ERROR: does not create new web page client."));
         delay(5000);
@@ -22,7 +22,7 @@ Web_Page::Web_Page()
 
 Web_Page::~Web_Page()
 {
-    if(m_client_ptr)
+    if (m_client_ptr)
     {
         m_client_ptr->stopAll();
         delete m_client_ptr;
@@ -65,10 +65,10 @@ int Web_Page::show(WiFiServer *server_ptr)
     Serial.println(F("Disconnecting from client."));
     Serial.println();
 
-    //m_client_ptr->flush();
-    //m_client_ptr->stopAll();
-    //m_client_ptr->abort();
-    //m_client_ptr->stop(600);
+    // m_client_ptr->flush();
+    // m_client_ptr->stopAll();
+    // m_client_ptr->abort();
+    // m_client_ptr->stop(600);
     return ret_val;
 }
 
@@ -329,12 +329,14 @@ int Web_Page::web_head()
     // CSS to style the on/off buttons
     // Feel free to change the background-color and font-size attributes to fit your preferences
     m_client_ptr->println(F("<style>html {background-color: #27292f; color: #DCDCDC; font-family: Helvetica; display: "
-                        "inline-block; margin: 0px auto; text-align: center;}"));
-    m_client_ptr->println(F(".button {background-color: #195B6A; border: none; color: white; padding: 16px 40px; text-decoration: "
-                        "none; font-size: 30px; margin: 2px; cursor: pointer;}"));
+                            "inline-block; margin: 0px auto; text-align: center;}"));
+    m_client_ptr->println(
+        F(".button {background-color: #195B6A; border: none; color: white; padding: 16px 40px; text-decoration: "
+          "none; font-size: 30px; margin: 2px; cursor: pointer;}"));
     m_client_ptr->println(F(".button2 {background-color: #77878A;}"));
-    m_client_ptr->println(F(".button3 {background-color: #195B6A; border: none; color: white; padding: 6px 40px; text-decoration: "
-                        "none; font-size: 16px; margin: 2px; cursor: pointer;}"));
+    m_client_ptr->println(
+        F(".button3 {background-color: #195B6A; border: none; color: white; padding: 6px 40px; text-decoration: "
+          "none; font-size: 16px; margin: 2px; cursor: pointer;}"));
     m_client_ptr->println(F(".input {background-color: #b6b6b6; color: #220e0e; font-size: 20px;}"));
     m_client_ptr->println(F(".center {margin-left: auto; margin-right: auto;}</style>"));
     // script
@@ -363,15 +365,16 @@ int Web_Page::web_head()
     m_client_ptr->println(" ],");
     for (size_t set_num = 0; set_num < Light_settings.size(); set_num++)
     {
-        m_client_ptr->print("[  " + String(Light_settings.at(set_num).m_time.get_hour_float()));                  // Time
-        m_client_ptr->print(", " + String(Light_system_ptr->get_summary_power_w(Light_settings.at(set_num))));        // Summary, W
+        m_client_ptr->print("[  " + String(Light_settings.at(set_num).m_time.get_hour_float()));               // Time
+        m_client_ptr->print(", " + String(Light_system_ptr->get_summary_power_w(Light_settings.at(set_num)))); // Summary, W
         m_client_ptr->print(", " + String(Light_system_ptr->get_summary_power_w(Random_light_settings.at(set_num)))); // Rnd W
-        m_client_ptr->print(", " + String(Light_settings.at(set_num).m_color_temp / 10));                         // Color temp, 10K
+        m_client_ptr->print(", " + String(Light_settings.at(set_num).m_color_temp / 10)); // Color temp, 10K
 
         for (int drv_num = 0; drv_num < Light_system_ptr->get_drivers_count(); drv_num++)
         {
-            m_client_ptr->print(", " + String(Light_system_ptr->get_driver_current(Light_settings.at(set_num), drv_num))); // Drivern
-                                                                                                                   // xW%
+            m_client_ptr->print(
+                ", " + String(Light_system_ptr->get_driver_current(Light_settings.at(set_num), drv_num))); // Drivern
+                                                                                                           // xW%
         }
 
         if (set_num != Light_settings.size() - 1)
@@ -475,7 +478,8 @@ int Web_Page::main_web()
     // summary power
     m_client_ptr->print(
         "<p>Current power: "
-        + String(Light_system_ptr->get_summary_power_w(Light_system_ptr->get_current_point(Random_light_settings, timeClient))) + "W");
+        + String(Light_system_ptr->get_summary_power_w(Light_system_ptr->get_current_point(Random_light_settings, timeClient)))
+        + "W");
     const int day_power_wh = Light_system_ptr->get_day_power_wh(Light_settings);
     m_client_ptr->print(" day power: " + String(day_power_wh) + "W*h");
     m_client_ptr->println(" month power: " + String(day_power_wh * 30LL / 1000LL) + "kW*h</p>");
@@ -483,8 +487,9 @@ int Web_Page::main_web()
     // Diagramms
     m_client_ptr->println(F("<h2>Charts</h2>"));
     m_client_ptr->println(F("<div id=\"curve_chart\" class=\"center\" style=\"width: 1600px; height: 700px\"></div>"));
-    m_client_ptr->println(F("<p>Y scale: <input type=\"range\" class=\"input\" id=\"scale\" min=\"10\" max=\"1000\" value=\"1000\" "
-                        "oninput=\"setScale(this.value)\" onchange=\"setScale(this.value)\"></p>"));
+    m_client_ptr->println(
+        F("<p>Y scale: <input type=\"range\" class=\"input\" id=\"scale\" min=\"10\" max=\"1000\" value=\"1000\" "
+          "oninput=\"setScale(this.value)\" onchange=\"setScale(this.value)\"></p>"));
 
     // Settings
     m_client_ptr->println(F("<h2>Settings</h2>"));
@@ -566,8 +571,10 @@ int Web_Page::settings_web()
     // Light Drivers settings
     m_client_ptr->println(F("<h3>Drivers settings</h3>"));
     m_client_ptr->println(F("<table class=\"center\" width=\"1380\"><tr><th width=\"100\">PWM Pin:</th>"));
-    m_client_ptr->println(F("<th width=\"100\">Frequency:</th><th width=\"120\">Resolution:</th><th width=\"100\">Smooth:</th><th width=\"140\">Max power:</th>"));
-    m_client_ptr->println(F("<th width=\"100\">Color temp:</th><th width=\"100\">Led off:</th><th width=\"100\">Led max:</th><th width=\"100\">Nonlinearity:</th><th></th></tr></table>"));
+    m_client_ptr->println(F("<th width=\"100\">Frequency:</th><th width=\"120\">Resolution:</th><th "
+                            "width=\"100\">Smooth:</th><th width=\"140\">Max power:</th>"));
+    m_client_ptr->println(F("<th width=\"100\">Color temp:</th><th width=\"100\">Led off:</th><th width=\"100\">Led "
+                            "max:</th><th width=\"100\">Nonlinearity:</th><th></th></tr></table>"));
     m_client_ptr->println(F("<table class=\"center\">"));
     for (int i = 0; i < Light_system_ptr->get_drivers_count(); i++)
     {

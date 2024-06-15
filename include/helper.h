@@ -30,9 +30,9 @@ template<typename T> T rounding(T value, T out_value, T diff)
     return value;
 }
 
-//inline constexpr uint8_t operator "" _u8( unsigned long long arg ) noexcept
+// inline constexpr uint8_t operator "" _u8( unsigned long long arg ) noexcept
 //{
-//    return static_cast< uint8_t >( arg );
-//}
+//     return static_cast< uint8_t >( arg );
+// }
 
 #endif

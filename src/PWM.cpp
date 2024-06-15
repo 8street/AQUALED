@@ -37,7 +37,7 @@ void PWM::destroy()
 bool PWM::reinit(uint8_t gpio_pin, uint32_t frequency, uint32_t resolution, int smooth_ms, uint32_t pwm_min, uint32_t pwm_max)
 {
     destroy();
-    m_gpio_pin = clamp(gpio_pin, uint8_t{0}, uint8_t{16});
+    m_gpio_pin = clamp(gpio_pin, uint8_t{ 0 }, uint8_t{ 16 });
     pinMode(m_gpio_pin, OUTPUT);
     digitalWrite(m_gpio_pin, HIGH); // off
     m_smooth.set_update_ms(smooth_ms);
@@ -69,9 +69,9 @@ bool PWM::max()
 
 bool PWM::set_duty_cycle_fast(int duty_cycle)
 {
-    //Serial.println("Duty cycle: " + String(m_duty_cycle));
+    // Serial.println("Duty cycle: " + String(m_duty_cycle));
     m_duty_cycle = clamp(duty_cycle, static_cast<int>(m_pwm_min), static_cast<int>(m_pwm_max));
-    //Serial.println("Analog_write: " + String(m_smooth.get_unsmoothed(m_duty_cycle)));
+    // Serial.println("Analog_write: " + String(m_smooth.get_unsmoothed(m_duty_cycle)));
     analogWrite(m_gpio_pin, m_smooth.get_unsmoothed(m_duty_cycle));
     yield();
     return 0;
@@ -97,7 +97,7 @@ bool PWM::is_active()
 
 bool PWM::set_min_max(int min, int max)
 {
-    if(min > max)
+    if (min > max)
     {
         std::swap(min, max);
     }

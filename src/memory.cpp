@@ -4,7 +4,6 @@
 #include "light_driver.h"
 #include "memory.h"
 
-
 String Eeprom_ssid;
 String Eeprom_password;
 String Eeprom_title;
@@ -19,7 +18,6 @@ const int Eeprom_title_address = Eeprom_timezone_address + 50;
 const int Eeprom_driver_address = Eeprom_title_address + 50;
 
 const int Eeprom_size = Eeprom_driver_address + sizeof(size_t) + sizeof(Light_driver) * 10;
-
 
 bool save_to_flash(const std::vector<Light_setting> &settings)
 {
