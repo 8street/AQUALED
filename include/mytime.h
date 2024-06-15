@@ -1,9 +1,9 @@
 #pragma once
 #ifndef MYTIME_H
-#define MYTIME_H
+#    define MYTIME_H
 
-#include <Arduino.h>
-#include <NTPClient.h>
+#    include <Arduino.h>
+#    include <NTPClient.h>
 
 class MyTime
 {
@@ -11,6 +11,7 @@ private:
     int m_hour;
     int m_min;
     int m_sec;
+
 public:
     MyTime(int hour = 0, int min = 0, int sec = 0);
     MyTime(NTPClient &ntp);
@@ -21,6 +22,7 @@ public:
     bool set_min(int m);
     bool set_sec(int s);
     int get_overall_seconds() const;
+    float get_hour_float() const;
     bool operator<(const MyTime &t) const;
     bool operator==(const MyTime &t) const;
     String print() const;
