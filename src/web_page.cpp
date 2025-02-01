@@ -191,6 +191,8 @@ int Web_Page::requests()
     {
         String ssid = get_middle_string(req, "ssid=", "&ends");
         String password = get_middle_string(req, "pa=", " HTTP/1.1");
+        ssid = change_browser_code_to_symbol(ssid);
+        password = change_browser_code_to_symbol(password);
         Serial.println("New SSID: " + ssid + " New Password: " + password);
         save_to_flash(Eeprom_ssid_address, ssid);
         save_to_flash(Eeprom_password_address, password);
@@ -202,6 +204,7 @@ int Web_Page::requests()
     {
         String ntp = get_middle_string(req, "server=", "&ends");
         String timezone = get_middle_string(req, "tz=", " HTTP/1.1");
+        ntp = change_browser_code_to_symbol(ntp);
         Serial.println("New NTP server: " + ntp + " Timezone: " + timezone);
         save_to_flash(Eeprom_ntp_address, ntp);
         save_to_flash(Eeprom_timezone_address, timezone);
@@ -222,6 +225,7 @@ int Web_Page::requests()
     {
         Eeprom_title = get_middle_string(req, "str=", " HTTP/1.1");
         Eeprom_title = change_plus_to_space(Eeprom_title);
+        Eeprom_title = change_browser_code_to_symbol(Eeprom_title);
         Serial.println("New title: " + Eeprom_title);
         save_to_flash(Eeprom_title_address, Eeprom_title);
         Serial.println(F("New title string saved."));
