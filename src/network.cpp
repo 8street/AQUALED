@@ -49,7 +49,7 @@ bool wifi_init()
     {
         ESP.wdtFeed();
         WiFi.mode(WIFI_AP);
-        ret_val |= WiFi.softAPConfig(IPAddress(192, 168, 0, 1), IPAddress(192, 168, 0, 1), IPAddress(255, 255, 255, 0));
+        ret_val |= WiFi.softAPConfig(IPAddress(192, 168, 1, 1), IPAddress(192, 168, 1, 1), IPAddress(255, 255, 255, 0));
         ret_val |= WiFi.softAP(Default_ap_ssid, Default_ap_password, 1, 1);
         Serial.println(F("WiFi AP created. SSID: ") + String(Default_ap_ssid));
         Serial.println(F("AP password: ") + String(Default_ap_password));
