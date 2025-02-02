@@ -51,6 +51,15 @@
             var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
             chart.draw(data, options);
           }
+          
+          function show_password(){
+            var x = document.getElementById("passwd");
+            if (x.type==="password") {
+                x.type="text";
+            } else {
+            x.type="password";
+            }
+          }
         </script>
     </head>
     <body>
@@ -155,7 +164,9 @@
 
         <p><form action="/wifi"><table class="center"><tr><th>SSID:</th>
         <th><input type="text" class="input" name="ssid" placeholder="SSID" value="asda"></th></tr><tr><th>Password:</th> 
-        <th><input type="password" class="input" name="password" placeholder="Password" value=""></th></tr></table>
+        <th><input type="password" class="input" name="password" placeholder="Password" id="passwd" autocomplete="off" value=""></th>
+        <th><input type="checkbox" onclick="show_password()"> Show</th>
+        </tr></table>
         <input type="submit" class="button" value="Save and connect"></form></p>
 
 

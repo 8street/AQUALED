@@ -1,7 +1,8 @@
 #include <vector>
 
-#include <Arduino.h>
 #include "text.h"
+#include <Arduino.h>
+
 
 String get_middle_string(const String &str, const String &before, const String &after)
 {
@@ -45,7 +46,7 @@ String change_browser_code_to_symbol(const String &str)
     arr.emplace_back(std::make_pair("%60", "`"));
     arr.emplace_back(std::make_pair("%7C", "|"));
 
-    for(const auto &p : arr)
+    for (const auto &p : arr)
     {
         yield();
         ret_str.replace(p.first, p.second);

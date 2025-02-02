@@ -8,12 +8,12 @@
 
 #    include "Light.h"
 
-#    define LED_PIN 2 // pin 2
-#    define WIFI_PIN 5
-#    define DRIVER1_240W_PWM_PIN 14
-#    define DRIVER2_100W_PWM_PIN 12
-#    define DRIVER3_240W_PWM_PIN 13
-#    define DRIVER4_100W_PWM_PIN 15
+#    define LED_PIN 2               // D4
+#    define WIFI_PIN 5              // D1
+#    define DRIVER1_240W_PWM_PIN 14 // D5
+#    define DRIVER2_100W_PWM_PIN 12 // D6
+#    define DRIVER3_240W_PWM_PIN 13 // D7
+#    define DRIVER4_100W_PWM_PIN 15 // D8
 
 extern NTPClient timeClient;
 extern bool Direct_Control_state;
