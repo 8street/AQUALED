@@ -41,8 +41,8 @@ int Web_Page::show(WiFiServer *server_ptr)
 
     m_client_ptr->disableKeepAlive();
     m_client_ptr->setTimeout(500);
-    Serial.println(F("New client"));                             // print a message out in the serial port
-    Serial.println(F("Time: ") + timeClient.getFormattedTime()); // print a message out in the serial port
+    Serial.println(F("New client")); // print a message out in the serial port
+    Serial.println(F("Time: ") + timeClient.getFormattedTime());
     Serial.println(F("Local IP: ") + m_client_ptr->localIP().toString());
     Serial.println(F("Local port: ") + String(m_client_ptr->localPort()));
     Serial.println(F("Remote IP: ") + m_client_ptr->remoteIP().toString());
@@ -65,10 +65,6 @@ int Web_Page::show(WiFiServer *server_ptr)
     Serial.println(F("Disconnecting from client."));
     Serial.println();
 
-    // m_client_ptr->flush();
-    // m_client_ptr->stopAll();
-    // m_client_ptr->abort();
-    // m_client_ptr->stop(600);
     return ret_val;
 }
 
@@ -404,8 +400,12 @@ int Web_Page::web_head()
 
     m_client_ptr->println(F("var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));"));
     m_client_ptr->println(F("chart.draw(data, myOptions);}"));
-    m_client_ptr->println(F("</script>"));
 
+    m_client_ptr->println(F("function show_password(){"));
+    m_client_ptr->println(F("var x = document.getElementById(\"passwd\");"));
+    m_client_ptr->println(F("if (x.type===\"password\") {x.type=\"text\";} else {x.type=\"password\";}}"));
+
+    m_client_ptr->println(F("</script>"));
     m_client_ptr->println(F("</head>"));
     return 0;
 }
@@ -642,9 +642,13 @@ int Web_Page::settings_web()
     m_client_ptr->println(
         "<th><input type=\"text\" class=\"input\" name=\"ssid\" placeholder=\"SSID\" value=\"" + Eeprom_ssid
         + "\"></th></tr><tr><th>Password:</th>");
-    m_client_ptr->println(F("<th><input type=\"text\" class=\"input\" name=\"ends_pa\" value=\"\"></th></tr></table>"));
+    m_client_ptr->println(
+        F("<th><input type=\"password\" class=\"input\" name=\"ends_pa\" id=\"passwd\" autocomplete=\"off\" value=\"\"></th>"));
+    m_client_ptr->println(F("<th><input type=\"checkbox\" onclick=\"show_password()\"> Show</th></tr></table>"));
     m_client_ptr->println(F("<input type=\"submit\" class=\"button\" value=\"Save and Connect\"></form></p>"));
     m_client_ptr->println(F("<br><br>"));
+
+    // NTP settings
     m_client_ptr->println(F("<h3>NTP settings</h3>"));
     m_client_ptr->println(F("<p><form action=\"/ntp\"><table class=\"center\"><tr><th>Ntp server:</th>"));
     m_client_ptr->println(
