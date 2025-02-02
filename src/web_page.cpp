@@ -642,7 +642,7 @@ int Web_Page::settings_web()
     m_client_ptr->println(
         "<th><input type=\"text\" class=\"input\" name=\"ssid\" placeholder=\"SSID\" value=\"" + Eeprom_ssid
         + "\"></th></tr><tr><th>Password:</th>");
-    m_client_ptr->println(F("<th><input type=\"text\" class=\"input\" name=\"ends_pa\" value=\"\"></th></tr></table>"));
+    m_client_ptr->println(F("<th><input type=\"password\" class=\"input\" name=\"ends_pa\" value=\"\"></th></tr></table>"));
     m_client_ptr->println(F("<input type=\"submit\" class=\"button\" value=\"Save and Connect\"></form></p>"));
     m_client_ptr->println(F("<br><br>"));
     m_client_ptr->println(F("<h3>NTP settings</h3>"));
