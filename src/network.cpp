@@ -55,6 +55,8 @@ bool wifi_init()
         Serial.println(F("AP password: ") + String(Default_ap_password));
         Serial.println(F("IP address: ") + WiFi.softAPIP().toString());
     }
+    // 13dbm = 20 mW
+    WiFi.setOutputPower(13.0f);
 
     Serial.println();
 
