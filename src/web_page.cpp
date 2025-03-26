@@ -304,6 +304,10 @@ int Web_Page::requests()
         m_drivers_not_saved = false;
         ESP.restart();
     }
+    else if (req.indexOf("/update_time") >= 0)
+    {
+        update_NTP_time();
+    }
     else
     {
         Serial.println(F("Default request"));
@@ -325,6 +329,7 @@ int Web_Page::web_head()
     m_client_ptr->println();
     m_client_ptr->println(F("<!DOCTYPE html><html>"));
     m_client_ptr->println(F("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"));
+    m_client_ptr->println("<title>" + Eeprom_title + "</title>");
     m_client_ptr->println(F("<link rel=\"icon\" href=\"data:,\">"));
     // CSS to style the on/off buttons
     // Feel free to change the background-color and font-size attributes to fit your preferences
@@ -658,6 +663,7 @@ int Web_Page::settings_web()
         "<th><input type=\"number\" class=\"input\" name=\"ends_tz\" placeholder=\"Hours\" min=\"-24\" max=\"24\" value=\""
         + String(Timezone) + "\"></th></tr></table>");
     m_client_ptr->println(F("<input type=\"submit\" class=\"button\" value=\"Save Time Settings\"></form></p>"));
+    m_client_ptr->println(F("<p><a href=\"/update_time\"><button class=\"button\">Update Time</button></a></p>"));
     m_client_ptr->println(F("<br><br>"));
     m_client_ptr->println(F("<p><a href=\"/wifi_settings\"><button class=\"button\">Close Settings</button></a></p>"));
     return 0;

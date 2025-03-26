@@ -31,6 +31,7 @@ WiFiUDP ntpUDP;
 Web_Page *Web_page_ptr = nullptr;
 
 NTPClient timeClient(ntpUDP, "pool.ntp.org", Timezone * 60 * 60);
+bool NTP_init_updated = false;
 
 bool Direct_Control_state = false;
 int Direct_Control_power = 0;
@@ -120,9 +121,12 @@ void setup(void)
     Serial.println(F("NTP client started"));
     Serial.print("NTP Server: " + eeprom_ntp);
     Serial.println(" timezone: " + eeprom_timezone + "h");
-    update_NTP_time();
 
-    randomSeed(timeClient.getEpochTime());
+    NTP_init_updated = update_NTP_time();
+    if (NTP_init_updated)
+    {
+        randomSeed(timeClient.getEpochTime());
+    }
 
     // light driver settings
     Light_system_ptr = new Light;
@@ -274,10 +278,10 @@ void loop(void)
         }
     }
 
-    if (new_minute() && !OTA_Active)
+    if (new_minute() && !NTP_init_updated)
     {
-        ArduinoOTA.end();
-        ArduinoOTA.begin();
+        NTP_init_updated = update_NTP_time();
+        randomSeed(timeClient.getEpochTime());
     }
 
     yield();

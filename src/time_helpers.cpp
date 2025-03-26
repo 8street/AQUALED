@@ -5,13 +5,14 @@
 
 const char daysOfTheWeek[7][12] = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
 
-void update_NTP_time()
+bool update_NTP_time()
 {
-    Serial.println(F("NTP Time has been updated"));
-    timeClient.update();
+    Serial.println(F("Updating NTP Time"));
+    const bool updated = timeClient.forceUpdate();
     Serial.print(daysOfTheWeek[timeClient.getDay()]);
     Serial.print(", ");
     Serial.println(timeClient.getFormattedTime());
+    return updated;
 }
 
 String uptime()
