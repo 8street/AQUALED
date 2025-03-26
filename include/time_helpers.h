@@ -4,7 +4,7 @@
 
 #    include <Arduino.h>
 
-void update_NTP_time();
+bool update_NTP_time();
 String uptime();
 bool new_day();
 bool new_hour();
