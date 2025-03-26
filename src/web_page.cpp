@@ -329,7 +329,7 @@ int Web_Page::web_head()
     m_client_ptr->println();
     m_client_ptr->println(F("<!DOCTYPE html><html>"));
     m_client_ptr->println(F("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"));
-    m_client_ptr->println(F("<title>Aquarium</title>"));
+    m_client_ptr->println("<title>" + Eeprom_title + "</title>");
     m_client_ptr->println(F("<link rel=\"icon\" href=\"data:,\">"));
     // CSS to style the on/off buttons
     // Feel free to change the background-color and font-size attributes to fit your preferences
